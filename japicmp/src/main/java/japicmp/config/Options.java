@@ -44,6 +44,7 @@ public class Options {
 				}
 			})
 			.toStringBuilder(FULL_PATH);
+	private boolean noSerialization = false;
 
 	private static final ListJoiner.ListJoinerToString<File> FULL_PATH = new ListJoiner.ListJoinerToString<File>() {
 		@Override
@@ -288,6 +289,14 @@ public class Options {
 
 	public void setNoAnnotations(boolean noAnnotations) {
 		this.noAnnotations = noAnnotations;
+	}
+
+	public boolean isNoSerialization() {
+		return noSerialization;
+	}
+
+	public void setNoSerialization(boolean noSerialization) {
+		this.noSerialization = noSerialization;
 	}
 
 	public void addIgnoreMissingClassRegularExpression(String missingClassRegEx) {

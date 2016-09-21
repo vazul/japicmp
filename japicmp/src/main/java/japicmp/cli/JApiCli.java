@@ -26,6 +26,7 @@ public class JApiCli {
 	public static final String IGNORE_MISSING_CLASSES_BY_REGEX = "--ignore-missing-classes-by-regex";
 	public static final String OLD_CLASSPATH = "--old-classpath";
 	public static final String NEW_CLASSPATH = "--new-classpath";
+	public static final String NO_SERIALIZATION = "--no-serialization";
 
 	public enum ClassPathMode {
 		ONE_COMMON_CLASSPATH, TWO_SEPARATE_CLASSPATHS
@@ -71,6 +72,8 @@ public class JApiCli {
 		public boolean noAnnotations = false;
 		@Option(name = "--report-only-filename", description = "Use just filename in report description.")
 		public boolean reportOnlyFilename;
+		@Option(name = {NO_SERIALIZATION}, description = "Do not compare serialization information.")
+		public boolean noSerialization = false;
 
 		@Override
 		public void run() {
@@ -121,6 +124,7 @@ public class JApiCli {
 			options.setOldClassPath(Optional.fromNullable(oldClassPath));
 			options.setNewClassPath(Optional.fromNullable(newClassPath));
 			options.setNoAnnotations(noAnnotations);
+			options.setNoSerialization(noSerialization);
 			for (String missingClassRegEx : ignoreMissingClassesByRegEx) {
 				options.addIgnoreMissingClassRegularExpression(missingClassRegEx);
 			}

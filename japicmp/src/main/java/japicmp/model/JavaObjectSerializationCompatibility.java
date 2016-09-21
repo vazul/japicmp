@@ -34,7 +34,8 @@ public class JavaObjectSerializationCompatibility {
 
 	private static SerialVersionUidResult computeSerialVersionUid(JarArchiveComparatorOptions options, Optional<CtClass> ctClassOptional, JarArchiveComparator jarArchiveComparator) {
 		SerialVersionUidResult result = new SerialVersionUidResult();
-		if (ctClassOptional.isPresent()) {
+		if (ctClassOptional.isPresent() && !options.isNoSerialization())
+		{
 			CtClass ctClass = ctClassOptional.get();
 			if (isCtClassSerializable(options, ctClass, jarArchiveComparator)) {
 				result.serializable = true;

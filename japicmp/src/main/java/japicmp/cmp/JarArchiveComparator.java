@@ -1,6 +1,19 @@
 package japicmp.cmp;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.google.common.base.Optional;
+
 import japicmp.compat.CompatibilityChanges;
 import japicmp.exception.JApiCmpException;
 import japicmp.exception.JApiCmpException.Reason;
@@ -15,14 +28,6 @@ import japicmp.util.AnnotationHelper;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class provides the basic methods to compare the classes within to jar archives.
@@ -72,6 +77,9 @@ public class JarArchiveComparator {
 	}
 
 	private void checkJavaObjectSerializationCompatibility(List<JApiClass> jApiClasses) {
+		if (options.isNoSerialization()) {
+			return;
+		}
 		JavaObjectSerializationCompatibility javaObjectSerializationCompatibility = new JavaObjectSerializationCompatibility();
 		javaObjectSerializationCompatibility.evaluate(jApiClasses);
 	}

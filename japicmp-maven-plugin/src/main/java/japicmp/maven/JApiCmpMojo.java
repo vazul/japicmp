@@ -1,19 +1,31 @@
 package japicmp.maven;
 
-import com.google.common.base.Optional;
-import japicmp.cli.JApiCli;
-import japicmp.cmp.JarArchiveComparator;
-import japicmp.cmp.JarArchiveComparatorOptions;
-import japicmp.config.Options;
-import japicmp.filter.ClassFilter;
-import japicmp.model.*;
-import japicmp.output.Filter;
-import japicmp.output.semver.SemverOut;
-import japicmp.output.stdout.StdoutOutputGenerator;
-import japicmp.output.xml.XmlOutput;
-import japicmp.output.xml.XmlOutputGenerator;
-import japicmp.output.xml.XmlOutputGeneratorOptions;
-import javassist.CtClass;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.jar.JarFile;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
@@ -37,19 +49,34 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.jar.JarFile;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+import com.google.common.base.Optional;
+
+import japicmp.cli.JApiCli;
+import japicmp.cmp.JarArchiveComparator;
+import japicmp.cmp.JarArchiveComparatorOptions;
+import japicmp.config.Options;
+import japicmp.filter.ClassFilter;
+import japicmp.model.AccessModifier;
+import japicmp.model.JApiAnnotation;
+import japicmp.model.JApiBehavior;
+import japicmp.model.JApiChangeStatus;
+import japicmp.model.JApiClass;
+import japicmp.model.JApiCompatibilityChange;
+import japicmp.model.JApiConstructor;
+import japicmp.model.JApiField;
+import japicmp.model.JApiImplementedInterface;
+import japicmp.model.JApiMethod;
+import japicmp.model.JApiParameter;
+import japicmp.model.JApiReturnType;
+import japicmp.model.JApiSuperclass;
+import japicmp.model.JApiType;
+import japicmp.output.Filter;
+import japicmp.output.semver.SemverOut;
+import japicmp.output.stdout.StdoutOutputGenerator;
+import japicmp.output.xml.XmlOutput;
+import japicmp.output.xml.XmlOutputGenerator;
+import japicmp.output.xml.XmlOutputGeneratorOptions;
+import javassist.CtClass;
 
 @Mojo(name = "cmp", requiresDependencyResolution = ResolutionScope.COMPILE, defaultPhase = LifecyclePhase.VERIFY)
 public class JApiCmpMojo extends AbstractMojo {
@@ -729,6 +756,7 @@ public class JApiCmpMojo extends AbstractMojo {
 				options.setNoAnnotations(noAnnotations);
 			}
 			options.setReportOnlyFilename(parameterParam.isReportOnlyFilename());
+			options.setNoSerialization(parameterParam.isNoSerialization());
 		}
 		return options;
 	}

@@ -46,6 +46,8 @@ public class Parameter {
 	private boolean breakBuildIfCausedByExclusion = true;
 	@org.apache.maven.plugins.annotations.Parameter(required = false)
 	private boolean reportOnlyFilename;
+	@org.apache.maven.plugins.annotations.Parameter(required = false)
+	private boolean noSerialization;
 
 	public String getNoAnnotations() {
 		return noAnnotations;
@@ -53,6 +55,14 @@ public class Parameter {
 
 	public void setNoAnnotations(String noAnnotations) {
 		this.noAnnotations = noAnnotations;
+	}
+
+	public boolean isNoSerialization() {
+		return noSerialization;
+	}
+
+	public void setNoSerialization(boolean noSerialization) {
+		this.noSerialization = noSerialization;
 	}
 
 	public String getAccessModifier() {

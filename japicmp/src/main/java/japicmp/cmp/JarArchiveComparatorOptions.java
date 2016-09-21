@@ -1,16 +1,17 @@
 package japicmp.cmp;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.google.common.base.Optional;
+
 import japicmp.config.IgnoreMissingClasses;
 import japicmp.config.Options;
 import japicmp.exception.JApiCmpException;
 import japicmp.filter.Filters;
 import japicmp.model.AccessModifier;
-
-import java.io.File;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class represents all options for the comparison.
@@ -25,6 +26,7 @@ public class JarArchiveComparatorOptions {
 	private List<String> oldClassPath = new LinkedList<>();
 	private List<String> newClassPath = new LinkedList<>();
 	private boolean noAnnotations = false;
+	private boolean noSerialization = false;
 
 	/**
 	 * When both versions of the archives under comparison use the exact same classpath
@@ -46,6 +48,7 @@ public class JarArchiveComparatorOptions {
 		toJarArchiveComparatorClassPath(options.getOldClassPath(), comparatorOptions.getOldClassPath());
 		toJarArchiveComparatorClassPath(options.getNewClassPath(), comparatorOptions.getNewClassPath());
 		comparatorOptions.setNoAnnotations(options.isNoAnnotations());
+		comparatorOptions.setNoSerialization(options.isNoSerialization());
 		return comparatorOptions;
 	}
 
@@ -127,6 +130,14 @@ public class JarArchiveComparatorOptions {
 
 	public boolean isNoAnnotations() {
 		return noAnnotations;
+	}
+
+	public void setNoSerialization(boolean noSerialization) {
+		this.noSerialization = noSerialization;
+	}
+
+	public boolean isNoSerialization() {
+		return noSerialization;
 	}
 
 	public IgnoreMissingClasses getIgnoreMissingClasses() {
